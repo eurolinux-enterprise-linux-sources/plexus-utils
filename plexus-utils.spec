@@ -33,7 +33,7 @@
 
 Name:           plexus-utils
 Version:        3.0.9
-Release:        7%{?dist}
+Release:        9%{?dist}
 Summary:        Plexus Common Utilities
 # ASL 1.1: several files in src/main/java/org/codehaus/plexus/util/ 
 # xpp: src/main/java/org/codehaus/plexus/util/xml/pull directory
@@ -48,6 +48,10 @@ Group:          Development/Libraries
 URL:            http://plexus.codehaus.org/
 Source0:        https://github.com/sonatype/%{name}/archive/%{name}-%{version}.tar.gz
 Source1:        http://apache.org/licenses/LICENSE-2.0.txt
+
+# Backported from upstream commit b38a1b3
+# Fixes upstream bug PLXUTILS-161, aka rhbz#958733
+Patch0:         %{name}-PLXUTILS-161.patch
 
 BuildArch:      noarch
 BuildRequires:  jpackage-utils >= 0:1.6
@@ -80,6 +84,7 @@ Javadoc for %{name}.
 
 %prep
 %setup -q -n %{name}-%{name}-%{version}
+%patch0 -p1
 cp %{SOURCE1} .
 
 %mvn_file : %{parent}/%{subname}
@@ -98,6 +103,13 @@ cp %{SOURCE1} .
 %doc NOTICE.txt LICENSE-2.0.txt
 
 %changelog
+* Mon Jan 27 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.0.9-9
+- Backport upstream patch for PLXUTILS-161
+- Resolves: rhbz#1009412
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 3.0.9-8
+- Mass rebuild 2013-12-27
+
 * Thu Aug 22 2013 Michal Srb <msrb@redhat.com> - 3.0.9-7
 - Migrate away from mvn-rpmbuild (Resolves: #997480)
 
